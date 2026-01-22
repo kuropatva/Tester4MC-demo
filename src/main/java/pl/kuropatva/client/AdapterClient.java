@@ -1,6 +1,7 @@
 package pl.kuropatva.client;
 
 import org.geysermc.mcprotocollib.network.ClientSession;
+import org.geysermc.mcprotocollib.network.event.session.DisconnectedEvent;
 import org.geysermc.mcprotocollib.network.event.session.SessionAdapter;
 import org.geysermc.mcprotocollib.network.event.session.SessionListener;
 import org.geysermc.mcprotocollib.network.factory.ClientNetworkSessionFactory;
@@ -43,6 +44,14 @@ public class AdapterClient implements MCClient {
                 .setProtocol(protocol)
                 .setProxy(null)
                 .create();
+//        session.addListener(new SessionAdapter() {
+//            @Override
+//            public void disconnected(DisconnectedEvent event) {
+//                System.out.println("Client disconnected");
+//                System.out.println("Reason: " + event.getReason());
+//                System.out.println("Cause: " + event.getCause());
+//            }
+//        });
     }
 
     public void addAdapter(SessionAdapter adapter) {
@@ -62,9 +71,12 @@ public class AdapterClient implements MCClient {
         for (var adapter : adapters) {
             session.addListener(adapter);
         }
-        connectionThread = new Thread(() -> session.connect(true));
+        connectionThread = new Thread(() -> {
+            session.connect(true);
+        });
         connectionThread.start();
     }
+
 
     public void kill() {
         session.disconnect("");

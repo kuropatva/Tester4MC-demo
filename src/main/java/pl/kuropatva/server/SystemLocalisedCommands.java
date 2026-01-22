@@ -7,10 +7,10 @@ public class SystemLocalisedCommands {
     private final OS os = System.getProperty("os.name").toLowerCase().startsWith("windows") ? OS.WINDOWS : OS.UNIX;
 
     public enum Command {
-        RUN("java -Xms2G -Xmx4G -DIReallyKnowWhatIAmDoingISwear -jar Spigot.jar", "./%s");
+        RUN("%s", "./%s");
 
-        private final String windows;
-        private final String unix;
+        private String windows;
+        private String unix;
 
         Command(String windows, String unix) {
             this.windows = windows;
@@ -23,6 +23,14 @@ public class SystemLocalisedCommands {
 
         public String getUnix() {
             return unix;
+        }
+
+        public void setWindows(String s) {
+            this.windows = s;
+        }
+
+        public void setUnix(String s) {
+            this.unix = s;
         }
     }
 

@@ -9,7 +9,7 @@ public record InstanceConfig(InetSocketAddress ip, Path from, Path to) {
 
     public static  InstanceConfig of(String portPool, String from) {
         var ip = IPGenerator.acquire(portPool);
-        if (ip == null) return null;
+        if (ip == null) throw new RuntimeException("No ports available");
         return new InstanceConfig(ip, Path.of(from), Path.of(mainDir + UniqueNameGenerator.get()));
     }
 

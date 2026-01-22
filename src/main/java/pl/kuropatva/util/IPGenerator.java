@@ -25,24 +25,25 @@ public class IPGenerator {
         globalIPPool.remove(poolName);
     }
 
-    public static InetSocketAddress acquire(String poolName) {
-        var ipPool = globalIPPool.get(poolName);
-        var port = -1;
-        for (Integer i : ipPool.portPool) {
-            port = i;
-            break;
+    public synchronized static InetSocketAddress acquire(String poolName) {
+        IPPool ipPool = globalIPPool.get(poolName);
+        if (ipPool == null || ipPool.portPool.isEmpty()) {
+            return null;
         }
 
-        if (port < 0) return null;
+        int port = ipPool.portPool.iterator().nextInt();
+        ipPool.portPool.remove(port);
+
         return new InetSocketAddress(ipPool.hostname, port);
     }
 
-    public static void free(String poolName, InetSocketAddress address) {
+
+    public synchronized static void free(String poolName, InetSocketAddress address) {
         var ipPool = globalIPPool.get(poolName);
         if (ipPool != null) ipPool.portPool.add(address.getPort());
     }
 
-    public static void free(String poolName, InstanceConfig instanceConfig) {
+    public synchronized static void free(String poolName, InstanceConfig instanceConfig) {
         free(poolName, instanceConfig.ip());
     }
 

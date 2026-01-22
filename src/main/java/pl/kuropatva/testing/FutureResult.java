@@ -18,8 +18,10 @@ public class FutureResult {
         TestResult testResult;
         try {
             testResult = completableFuture.get(timeout.timeout(), timeout.unit());
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+        } catch (InterruptedException | ExecutionException e) {
             testResult = new TestResult(false, e.toString());
+        } catch (TimeoutException e) {
+            testResult = new TestResult(false, "Timeout");
         }
         return testResult;
     }

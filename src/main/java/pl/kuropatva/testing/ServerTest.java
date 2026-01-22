@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Thread.onSpinWait;
+import static java.lang.Thread.sleep;
 
 public class ServerTest {
 
@@ -58,6 +59,7 @@ public class ServerTest {
         while (!oChecker.isOnline()) {
             onSpinWait();
         }
+        System.out.println("Connecting clients...");
         for (var client : clients) {
             client.join();
         }

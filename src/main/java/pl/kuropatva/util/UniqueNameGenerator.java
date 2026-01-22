@@ -4,7 +4,7 @@ public class UniqueNameGenerator {
 
     private static long num = 0;
 
-    public static String get() {
+    public synchronized static String get() {
         return Settings.get(Settings.Field.NAME_SERVER_PREFIX) + num++;
     }
 
